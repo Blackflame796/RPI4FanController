@@ -69,8 +69,10 @@ func getSystemLoad() float64 {
 }
 
 func getTemp() float64 {
-	t, _ := cpu.Counts(true)
-	data, _ := os.ReadFile("/sys/class/thermal/thermal_zone0/temp")
+	data, err := os.ReadFile("/sys/class/thermal/thermal_zone0/temp")
+	if err != nil {
+		return 0
+	}
 	tempInt, _ := strconv.Atoi(strings.TrimSpace(string(data)))
 	return float64(tempInt) / 1000.0
 }
